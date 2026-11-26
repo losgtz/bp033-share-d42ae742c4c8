@@ -4,11 +4,11 @@
 .card{background:#fff;padding:24px 28px;border-radius:10px;box-shadow:0 4px 18px #0002;max-width:440px;width:90%}
 h1{font-size:17px;margin:0 0 6px}p{color:#56606b;font-size:13px}input{width:100%;box-sizing:border-box;padding:9px;font-size:16px;min-height:44px;border:1px solid #b9c2cc;border-radius:6px}
 button{margin-top:10px;padding:9px 16px;font-size:14px;min-height:44px;background:#1f5fa8;color:#fff;border:none;border-radius:6px;cursor:pointer}#msg{color:#b3261e;font-size:13px;min-height:18px;margin-top:8px}
-ul{padding-left:18px}li{margin:8px 0;font-size:15px}li a{display:inline-block;padding:10px 0}a{color:#1f5fa8}</style></head><body>
+ul{padding-left:18px}.pc{border:1px solid #d5dbe1;border-radius:8px;padding:8px 14px;margin:12px 0}.pc h2{font-size:14px;margin:6px 0 0}.pc p{margin:2px 0 0}li{margin:8px 0;font-size:15px}li a{display:inline-block;padding:10px 0}a{color:#1f5fa8}</style></head><body>
 <div class="card" id="card"><h1>Proj 25-142 - BP033 Fine Arts 3D Multi-Trade Viewer - Lake Olympia MS</h1><p>FBISD BP033 Fine Arts &middot; Proj 25-142 &middot; Approximate, from 2D plans, not a model. Password required.</p>
 <form id="f"><input type="password" id="pw" placeholder="Password" autocomplete="current-password" autofocus><button id="go" type="submit">Open</button></form><div id="msg"></div></div>
 <script>
-const MODE='viewer',BLOB='d/185439eb5eae7968.bin',SALT='wx3ZJMNfCBULnCAPigVuLQ==',ITER=600000,CHECK='1Zs+CTl+CJra/EIezaErMR5p3KXuHKXG18/0enbdqtnlsIE9',SK='bp033-share-key-'+SALT;
+const MODE='viewer',BLOB='d/185439eb5eae7968.bin',SALT='wx3ZJMNfCBULnCAPigVuLQ==',ITER=600000,CHECK='RbJ9IOCy1v3k2EuZ/j1cF+v5AqtbAHuniRCKFOunPUUpeA6+',SK='bp033-share-key-'+SALT;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(pw){const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);
  return new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},km,256));}
@@ -18,9 +18,9 @@ const msg=t=>document.getElementById('msg').textContent=t;
 async function openWith(raw){
  await dec(raw,b64(CHECK));sessionStorage.setItem(SK,btoa(String.fromCharCode(...raw)));
  if(MODE==='index'){const h=new TextDecoder().decode(await dec(raw,b64(BLOB)));document.getElementById('f').remove();msg('');
-   document.querySelector('#card p').innerHTML='FBISD BP033 Fine Arts &middot; Proj 25-142 &middot; Approximate, from 2D plans, not a model. Pick a campus (opens the 3D viewer):';
+   document.querySelector('#card p').innerHTML='FBISD BP033 Fine Arts &middot; Proj 25-142 &middot; Approximate, from 2D plans, not a model. Pick a viewer (opens the 3D viewer):';
    document.getElementById('card').insertAdjacentHTML('beforeend',h);window.__unlocked=true;return;}
- msg('Loading 3D viewer (about 10 MB)...');const r=await fetch(BLOB,{cache:'no-cache'});if(!r.ok)throw new Error('download failed '+r.status);
+ msg('Loading 3D viewer (7-10 MB)...');const r=await fetch(BLOB,{cache:'no-cache'});if(!r.ok)throw new Error('download failed '+r.status);
  const h=new TextDecoder().decode(await dec(raw,await r.arrayBuffer()));document.open();document.write(h);document.close();}
 document.getElementById('f').onsubmit=async e=>{e.preventDefault();msg('Checking...');
  try{await openWith(await derive(document.getElementById('pw').value));}catch(err){msg(err&&err.message&&err.message.startsWith('download')?err.message:'Wrong password.');}};
