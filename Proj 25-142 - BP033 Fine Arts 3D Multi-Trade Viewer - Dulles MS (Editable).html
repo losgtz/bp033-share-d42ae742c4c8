@@ -8,7 +8,7 @@ ul{padding-left:18px}.pc{border:1px solid #d5dbe1;border-radius:8px;padding:8px 
 <div class="card" id="card"><h1>Proj 25-142 - BP033 Fine Arts 3D Multi-Trade Viewer - Dulles MS</h1><p>FBISD BP033 Fine Arts &middot; Proj 25-142 &middot; Approximate, from 2D plans, not a model. Password required.</p>
 <form id="f"><input type="password" id="pw" placeholder="Password" autocomplete="current-password" autofocus><button id="go" type="submit">Open</button></form><div id="msg"></div></div>
 <script>
-const MODE='viewer',BLOB='d/2516a0cf991ca816.bin',SALT='wx3ZJMNfCBULnCAPigVuLQ==',ITER=600000,CHECK='1fLFbWd7/QvGpX+JPY1rt7XNOxVoopuwnMQTMb3SBB9B+SSG',SK='bp033-share-key-'+SALT;
+const MODE='viewer',BLOB='d/2516a0cf991ca816.bin',SALT='wx3ZJMNfCBULnCAPigVuLQ==',ITER=600000,CHECK='cTyjSUWq6BshI1o8VrhZP6IigZS5+xeiEvn/7R4fWWBGQZQM',SK='bp033-share-key-'+SALT;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(pw){const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);
  return new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},km,256));}
